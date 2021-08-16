@@ -9,7 +9,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   final CustomTimerController _controller = new CustomTimerController();
 
   @override
@@ -28,6 +27,7 @@ class _MyAppState extends State<MyApp> {
               from: Duration(hours: 12),
               to: Duration(hours: 0),
               interval: Duration(seconds: 1),
+              onBuildAction: CustomTimerAction.auto_start,
               builder: (CustomTimerRemainingTime remaining) {
                 return Text(
                   "${remaining.hours}:${remaining.minutes}:${remaining.seconds}",
@@ -35,7 +35,9 @@ class _MyAppState extends State<MyApp> {
                 );
               },
             ),
-            SizedBox(height: 16.0,),
+            SizedBox(
+              height: 16.0,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -50,10 +52,9 @@ class _MyAppState extends State<MyApp> {
                   color: Colors.blue,
                 ),
                 MaterialButton(
-                  child: Text("Reset", style: TextStyle(color: Colors.white)),
-                  onPressed: () => _controller.reset(),
-                  color: Colors.red
-                ),
+                    child: Text("Reset", style: TextStyle(color: Colors.white)),
+                    onPressed: () => _controller.reset(),
+                    color: Colors.red),
               ],
             )
           ],

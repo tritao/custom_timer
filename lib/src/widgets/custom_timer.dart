@@ -113,7 +113,7 @@ class CustomTimer extends StatefulWidget {
   final Widget Function(CustomTimerRemainingTime remaining) builder;
 
   /// NOTE: The widget needs a different `Key` than the `builder`.
-  /// 
+  ///
   /// Function that runs when the timer finished.
   ///
   /// Returns a `CustomTimerRemainingTime` to get the `days`, `hours`, `minutes`, `seconds` and `milliseconds` if desired. So you can build the widget the way you want.
@@ -124,7 +124,7 @@ class CustomTimer extends StatefulWidget {
   final Widget Function(CustomTimerRemainingTime remaining)? finishedBuilder;
 
   /// NOTE: The widget needs a different `Key` than the `builder`.
-  /// 
+  ///
   /// Function that is executed when the timer is paused.
   ///
   /// Returns a `CustomTimerRemainingTime` to get the remaining `days`, `hours`, `minutes`, `seconds` and `milliseconds` if desired. So you can build the widget the way you want.
@@ -135,7 +135,7 @@ class CustomTimer extends StatefulWidget {
   final Widget Function(CustomTimerRemainingTime remaining)? pausedBuilder;
 
   /// NOTE: The widget needs a different `Key` than the `builder`.
-  /// 
+  ///
   /// Function that is executed when the timer is reset.
   ///
   /// Returns a `CustomTimerRemainingTime` to get the `days`, `hours`, `minutes`, `seconds` and `milliseconds` if desired. So you can build the widget the way you want.
@@ -172,12 +172,12 @@ class _CustomTimerState extends State<CustomTimer> {
   @override
   void dispose() {
     if (_timer!.isActive) _timer!.cancel();
-    if(widget.controller == null) _controller.dispose();
+    if (widget.controller == null) _controller.dispose();
     super.dispose();
   }
 
   void _action(CustomTimerAction action) {
-    if(_timer != null) _timer!.cancel();
+    if (_timer != null) _timer!.cancel();
     if (action == CustomTimerAction.auto_start)
       _startTimer();
     else if (action == CustomTimerAction.go_to_start)
@@ -221,7 +221,7 @@ class _CustomTimerState extends State<CustomTimer> {
 
   void _startCountdown() {
     _timer = Timer.periodic(widget.interval, (Timer timer) {
-      if (_duration.inMilliseconds == widget.to.inMilliseconds) {
+      if (_duration.inMilliseconds <= widget.to.inMilliseconds) {
         // Countdown finished.
         _onTimerFinished();
       } else
@@ -275,26 +275,25 @@ class _CustomTimerState extends State<CustomTimer> {
       // Return the widget if the resetBuilder is being used.
       if (_controller.state == CustomTimerState.reset &&
           widget.resetBuilder != null) {
-        setState(() => _returnWidget =
-            widget.resetBuilder!(CustomTimerRemainingTime(duration: _duration)));
+        setState(() => _returnWidget = widget
+            .resetBuilder!(CustomTimerRemainingTime(duration: _duration)));
       }
     } else
       print("[CustomTimer] The timer is already reset.");
   }
 
   void _onChangeState() {
-    if (widget.onChangeState != null)
-      widget.onChangeState!(_controller.state);
+    if (widget.onChangeState != null) widget.onChangeState!(_controller.state);
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: widget.onChangeStateAnimation.duration,
-      reverseDuration: widget.onChangeStateAnimation.reverseDuration,
-      switchInCurve: widget.onChangeStateAnimation.switchInCurve,
-      switchOutCurve: widget.onChangeStateAnimation.switchOutCurve,
-      child: _returnWidget ?? widget.builder(CustomTimerRemainingTime(duration: _duration))
-    );
+        duration: widget.onChangeStateAnimation.duration,
+        reverseDuration: widget.onChangeStateAnimation.reverseDuration,
+        switchInCurve: widget.onChangeStateAnimation.switchInCurve,
+        switchOutCurve: widget.onChangeStateAnimation.switchOutCurve,
+        child: _returnWidget ??
+            widget.builder(CustomTimerRemainingTime(duration: _duration)));
   }
 }
